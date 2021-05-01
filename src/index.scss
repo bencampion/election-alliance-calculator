@@ -1,0 +1,38 @@
+$custom-colors: (
+  "con": #0575c9,
+  "lab": #e91d0e,
+  "snp": #f8ed2e,
+  "ld": #efac18,
+  "dup": #b51c4b,
+  "sf": #159b78,
+  "pc": #13e594,
+  "sdlp": #224922,
+  "green": #5fb25f,
+  "apni": #d6b429,
+  "brexit": #02b6d7,
+  "uup": #3b75a8,
+  "other": #bababa
+);
+
+@import "bulma/sass/utilities/_all";
+@import "bulma/sass/base/_all";
+@import "bulma/sass/elements/_all";
+@import "bulma/sass/form/_all";
+@import "bulma/sass/helpers/_all";
+
+.columns {
+  display: grid;
+  @include mobile {
+    grid-template-columns: 1fr;
+  }
+  @include tablet {
+    grid-template-columns: 1fr 1fr;
+  }
+  gap: $block-spacing;
+  margin-bottom: $block-spacing;
+}
+
+.columns > div {
+  padding: $block-spacing;
+  background-color: $white-ter;
+}
