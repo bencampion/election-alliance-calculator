@@ -1,0 +1,20 @@
+{
+  "files": {
+    "main.css": "/election-alliance-calculator/static/css/main.c70bca7b.chunk.css",
+    "main.js": "/election-alliance-calculator/static/js/main.f1b954d1.chunk.js",
+    "main.js.map": "/election-alliance-calculator/static/js/main.f1b954d1.chunk.js.map",
+    "runtime-main.js": "/election-alliance-calculator/static/js/runtime-main.ae1a7c95.js",
+    "runtime-main.js.map": "/election-alliance-calculator/static/js/runtime-main.ae1a7c95.js.map",
+    "static/js/2.2fc1dcd8.chunk.js": "/election-alliance-calculator/static/js/2.2fc1dcd8.chunk.js",
+    "static/js/2.2fc1dcd8.chunk.js.map": "/election-alliance-calculator/static/js/2.2fc1dcd8.chunk.js.map",
+    "index.html": "/election-alliance-calculator/index.html",
+    "static/css/main.c70bca7b.chunk.css.map": "/election-alliance-calculator/static/css/main.c70bca7b.chunk.css.map",
+    "static/js/2.2fc1dcd8.chunk.js.LICENSE.txt": "/election-alliance-calculator/static/js/2.2fc1dcd8.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.ae1a7c95.js",
+    "static/js/2.2fc1dcd8.chunk.js",
+    "static/css/main.c70bca7b.chunk.css",
+    "static/js/main.f1b954d1.chunk.js"
+  ]
+}
