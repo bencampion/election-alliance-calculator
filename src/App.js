@@ -59,6 +59,7 @@ function App() {
 
       <footer className="block is-size-7 m-5">
         <p>Data: <a href="https://commonslibrary.parliament.uk/research-briefings/cbp-8749/">General Election 2019: full results and analysis</a></p>
+        <p>Code: <a href="https://github.com/bencampion/election-alliance-calculator">https://github.com/bencampion/election-alliance-calculator</a></p>
       </footer>
     </div>
   );
