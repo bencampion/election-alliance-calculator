@@ -1,4 +1,19 @@
-const majoritySeats = {
+export type Party =
+  | "apni"
+  | "brexit"
+  | "dup"
+  | "con"
+  | "green"
+  | "lab"
+  | "ld"
+  | "pc"
+  | "sdlp"
+  | "sf"
+  | "snp"
+  | "uup"
+  | "other";
+
+export const majoritySeats: Record<Party, number> = {
   apni: 0,
   brexit: 0,
   dup: 0,
@@ -14,7 +29,13 @@ const majoritySeats = {
   other: 1,
 };
 
-const results = [
+type Result = {
+  name: string;
+  region: string;
+  winner: string;
+} & Partial<Record<Party, number>>;
+
+export const results: Result[] = [
   {
     name: "Aberconwy",
     region: "Wales",
@@ -2325,5 +2346,3 @@ const results = [
     other: 692,
   },
 ];
-
-export { majoritySeats, results };

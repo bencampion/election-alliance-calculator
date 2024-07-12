@@ -1,3 +1,4 @@
+import { afterAll, beforeAll, describe, expect, test } from "vitest";
 import { cleanup, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import App from "./App";
@@ -8,17 +9,17 @@ describe("No alliances", () => {
   });
 
   test.each([
-    [0, "Conservative", 365],
-    [1, "Labour", 202],
-    [2, "SNP", 48],
-    [3, "Lib Dems", 11],
-    [4, "DUP", 8],
-    [5, "Sinn Féin", 7],
-    [6, "Plaid Cymru", 4],
-    [7, "SDLP", 2],
-    [8, "APNI", 1],
-    [9, "Green", 1],
-    [10, "Other", 1],
+    [0, "Conservative", "365"],
+    [1, "Labour", "202"],
+    [2, "SNP", "48"],
+    [3, "Lib Dems", "11"],
+    [4, "DUP", "8"],
+    [5, "Sinn Féin", "7"],
+    [6, "Plaid Cymru", "4"],
+    [7, "SDLP", "2"],
+    [8, "APNI", "1"],
+    [9, "Green", "1"],
+    [10, "Other", "1"],
   ])("Result %i: %s have %i seats", (position, party, seats) => {
     expect(screen.getAllByRole("rowheader")[position]).toHaveTextContent(party);
     expect(screen.getAllByRole("cell")[position]).toHaveTextContent(seats);
@@ -33,25 +34,25 @@ describe("No alliances", () => {
 });
 
 describe("[Lib Dem + Green] Left Alliance and [DUP + UUP] Right Alliance", () => {
-  beforeAll(() => {
+  beforeAll(async () => {
     render(<App />);
-    userEvent.click(screen.getAllByLabelText("Green")[0]);
-    userEvent.click(screen.getAllByLabelText("Lib Dems")[0]);
-    userEvent.click(screen.getAllByLabelText("DUP")[1]);
-    userEvent.click(screen.getAllByLabelText("UUP")[1]);
+    await userEvent.click(screen.getAllByLabelText("Green")[0]);
+    await userEvent.click(screen.getAllByLabelText("Lib Dems")[0]);
+    await userEvent.click(screen.getAllByLabelText("DUP")[1]);
+    await userEvent.click(screen.getAllByLabelText("UUP")[1]);
   });
 
   test.each([
-    [0, "Conservative", 364],
-    [1, "Labour", 201],
-    [2, "SNP", 47],
-    [3, "Left Alliance", 15],
-    [4, "Right Alliance", 9],
-    [5, "Sinn Féin", 7],
-    [6, "Plaid Cymru", 4],
-    [7, "SDLP", 2],
-    [8, "Other", 1],
-  ])("Result %i: %s have %i seats", (position, party, seats) => {
+    [0, "Conservative", "364"],
+    [1, "Labour", "201"],
+    [2, "SNP", "47"],
+    [3, "Left Alliance", "15"],
+    [4, "Right Alliance", "9"],
+    [5, "Sinn Féin", "7"],
+    [6, "Plaid Cymru", "4"],
+    [7, "SDLP", "2"],
+    [8, "Other", "1"],
+  ])("Result %i: %s have %i seats", async (position, party, seats) => {
     expect(screen.getAllByRole("rowheader")[position]).toHaveTextContent(party);
     expect(screen.getAllByRole("cell")[position]).toHaveTextContent(seats);
   });

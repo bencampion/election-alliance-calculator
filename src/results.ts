@@ -1,7 +1,7 @@
-import { majoritySeats, results } from "./data.js";
+import { Party, majoritySeats, results } from "./data";
 
-function initialSeats(alliances) {
-  const seats = Object.assign({}, majoritySeats);
+function initialSeats(alliances: Record<string, string[]>) {
+  const seats: Record<string, number> = Object.assign({}, majoritySeats);
   Object.entries(alliances).forEach(([name, parties]) => {
     parties.forEach((party) => {
       seats[name] = (seats[name] ?? 0) + seats[party];
@@ -11,14 +11,14 @@ function initialSeats(alliances) {
   return seats;
 }
 
-function countVotes(alliances) {
+function countVotes(alliances: Record<string, string[]>) {
   const seats = initialSeats(alliances);
   const changes = [];
   for (const result of results) {
     const bestAlliance = Object.entries(alliances).reduce(
       (currentWinner, [name, parties]) => {
         const votes = parties.reduce(
-          (votes, party) => (result[party] ?? 0) + votes,
+          (votes, party) => (result[party as Party] ?? 0) + votes,
           0,
         );
         return votes > currentWinner.votes
@@ -26,8 +26,12 @@ function countVotes(alliances) {
           : currentWinner;
       },
       { votes: 0 },
-    );
-    if (bestAlliance.votes >= result[result.winner]) {
+    ) as {
+      name: string;
+      votes: number;
+      parties: string[];
+    };
+    if (bestAlliance.votes >= (result[result.winner as Party] ?? 0)) {
       seats[bestAlliance.name]++;
       if (!bestAlliance.parties.includes(result.winner)) {
         changes.push({ ...result, allianceWinner: bestAlliance.name });

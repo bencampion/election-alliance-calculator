@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { countVotes } from "./results.js";
+import { countVotes } from "./results";
 
-const partyNames = {
+const partyNames: Record<string, JSX.Element | string> = {
   apni: <abbr title="Alliance Party of Northern Ireland">APNI</abbr>,
   brexit: <abbr title="Brexit Party">Brexit</abbr>,
   con: <abbr title="Conservative Party">Conservative</abbr>,
@@ -19,14 +19,16 @@ const partyNames = {
   right: "Right Alliance",
 };
 
-function useSearchParam(name) {
+function useSearchParam(
+  name: string,
+): [string[], (newValues: string[]) => void] {
   const searchParams = new URLSearchParams(window.location.search);
   const [values, setValues] = useState(searchParams.getAll(name));
   return [
     values,
     (newValues) => {
       setValues(newValues);
-      const url = new URL(window.location);
+      const url = new URL(window.location.toString());
       url.searchParams.delete(name);
       newValues.forEach((value) => url.searchParams.append(name, value));
       url.searchParams.sort();
@@ -98,7 +100,13 @@ function App() {
   );
 }
 
-function Results({ results, alliances }) {
+function Results({
+  results,
+  alliances,
+}: {
+  results: ReturnType<typeof countVotes>;
+  alliances: Record<string, string[]>;
+}) {
   return (
     <section className="block mx-5">
       <div
@@ -106,7 +114,7 @@ function Results({ results, alliances }) {
         role="table"
       >
         {Object.entries(results.seats)
-          .filter(([party, count]) => count > 0)
+          .filter((seat) => seat[1] > 0)
           .sort((a, b) => b[1] - a[1])
           .map(([party, count]) => (
             <Votes
@@ -124,7 +132,15 @@ function Results({ results, alliances }) {
   );
 }
 
-function Votes({ party, count, alliances }) {
+function Votes({
+  party,
+  count,
+  alliances,
+}: {
+  party: string;
+  count: number;
+  alliances: Record<string, string[]>;
+}) {
   return (
     <div className="control" role="row">
       <div
@@ -143,8 +159,18 @@ function Votes({ party, count, alliances }) {
   );
 }
 
-function Alliance({ name, members, setMembers, opponents }) {
-  const toggleMembership = (e) => {
+function Alliance({
+  name,
+  members,
+  setMembers,
+  opponents,
+}: {
+  name: string;
+  members: string[];
+  setMembers: (newValues: string[]) => void;
+  opponents: string[];
+}) {
+  const toggleMembership = (e: React.ChangeEvent<HTMLInputElement>) => {
     const party = e.target.value;
     setMembers(
       members.includes(party)
@@ -179,7 +205,17 @@ function Alliance({ name, members, setMembers, opponents }) {
   );
 }
 
-function PartyCheckBox({ party, onChange, checked, disabled }) {
+function PartyCheckBox({
+  party,
+  onChange,
+  checked,
+  disabled,
+}: {
+  party: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  checked: boolean;
+  disabled: boolean;
+}) {
   return (
     <div className="control">
       <label className={`tags has-addons ${disabled ? "" : "is-clickable"}`}>
@@ -207,7 +243,7 @@ function PartyCheckBox({ party, onChange, checked, disabled }) {
   );
 }
 
-function SeatChanges({ results }) {
+function SeatChanges({ results }: { results: ReturnType<typeof countVotes> }) {
   return (
     <section className="mx-5 content">
       <details>
