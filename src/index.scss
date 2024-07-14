@@ -16,9 +16,14 @@ $custom-colors: (
 
 @import "bulma/sass/utilities/_all";
 @import "bulma/sass/base/_all";
-@import "bulma/sass/elements/_all";
-@import "bulma/sass/form/_all";
-@import "bulma/sass/helpers/_all";
+@import "bulma/sass/elements/container";
+@import "bulma/sass/elements/tag";
+@import "bulma/sass/elements/title";
+@import "bulma/sass/form/shared";
+@import "bulma/sass/form/tools";
+@import "bulma/sass/helpers/color";
+@import "bulma/sass/helpers/spacing";
+@import "bulma/sass/helpers/typography";
 
 .columns {
   display: grid;
