@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { countVotes } from "./results";
+import { Party, Result } from "./data/types";
 
 const partyNames: Record<string, JSX.Element | string> = {
   apni: <abbr title="Alliance Party of Northern Ireland">APNI</abbr>,
@@ -38,47 +39,15 @@ function useSearchParam(
 }
 
 function App() {
-  const [left, setLeft] = useSearchParam("left");
-  const [right, setRight] = useSearchParam("right");
-
-  const alliances = { left, right };
-  const results = countVotes(alliances);
-
   return (
     <div className="container">
       <header className="m-5">
         <h1 className="title mb-3">
           2019 UK general election alliance calculator
         </h1>
-        <p className="subtitle mt-0">
-          There were <strong>229</strong> constituencies in the{" "}
-          <a href="https://en.wikipedia.org/wiki/2019_United_Kingdom_general_election">
-            2019 United Kingdom general election
-          </a>{" "}
-          where the winner did not get a majority of the votes. What would have
-          happened if parties had formed alliances to combine their votes behind
-          a single candidate in each of those constituencies?
-        </p>
       </header>
 
-      <Results results={results} alliances={alliances} />
-
-      <section className="columns">
-        <Alliance
-          name="Left"
-          members={left}
-          setMembers={setLeft}
-          opponents={right}
-        />
-        <Alliance
-          name="Right"
-          members={right}
-          setMembers={setRight}
-          opponents={left}
-        />
-      </section>
-
-      <SeatChanges results={results} />
+      <Results year="2019" />
 
       <hr />
 
@@ -100,7 +69,59 @@ function App() {
   );
 }
 
-function Results({
+function Results({ year }: { year: "2019" }) {
+  const [left, setLeft] = useSearchParam("left");
+  const [right, setRight] = useSearchParam("right");
+
+  const alliances = { left, right };
+  const [data, setData] = useState({
+    majoritySeats: {} as Record<Party, number>,
+    results: [] as Result[],
+  });
+  useEffect(() => {
+    import(`./data/${year}.ts`).then(setData);
+  }, [year]);
+  const results = countVotes(alliances, data.majoritySeats, data.results);
+
+  const constituencies = Object.values(data.majoritySeats).reduce(
+    (prev, curr) => prev - curr,
+    650,
+  );
+  const wikiLink = `https://en.wikipedia.org/wiki/${year}_United_Kingdom_general_election`;
+
+  return (
+    <main>
+      <p className="subtitle mx-5">
+        There were <strong>{constituencies}</strong> constituencies in the{" "}
+        <a href={wikiLink}>{year} United Kingdom general election</a> where the
+        winner got less than 50 percent of the votes. What would have happened
+        if parties had formed alliances to combine their votes behind a single
+        candidate in each of those constituencies?
+      </p>
+
+      <Seats results={results} alliances={alliances} />
+
+      <section className="columns">
+        <Alliance
+          name="Left"
+          members={left}
+          setMembers={setLeft}
+          opponents={right}
+        />
+        <Alliance
+          name="Right"
+          members={right}
+          setMembers={setRight}
+          opponents={left}
+        />
+      </section>
+
+      <SeatChanges results={results} />
+    </main>
+  );
+}
+
+function Seats({
   results,
   alliances,
 }: {
@@ -117,7 +138,7 @@ function Results({
           .filter((seat) => seat[1] > 0)
           .sort((a, b) => b[1] - a[1])
           .map(([party, count]) => (
-            <Votes
+            <SeatCount
               key={party}
               party={party}
               count={count}
@@ -132,7 +153,7 @@ function Results({
   );
 }
 
-function Votes({
+function SeatCount({
   party,
   count,
   alliances,

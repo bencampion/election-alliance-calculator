@@ -1,6 +1,9 @@
-import { Party, majoritySeats, results } from "./data";
+import { Party, Result } from "./data/types";
 
-function initialSeats(alliances: Record<string, string[]>) {
+function initialSeats(
+  alliances: Record<string, string[]>,
+  majoritySeats: Record<Party, number>,
+) {
   const seats: Record<string, number> = Object.assign({}, majoritySeats);
   Object.entries(alliances).forEach(([name, parties]) => {
     parties.forEach((party) => {
@@ -11,9 +14,13 @@ function initialSeats(alliances: Record<string, string[]>) {
   return seats;
 }
 
-function countVotes(alliances: Record<string, string[]>) {
-  const seats = initialSeats(alliances);
-  const changes = [];
+function countVotes(
+  alliances: Record<string, string[]>,
+  majoritySeats: Record<Party, number>,
+  results: Result[],
+) {
+  const seats = initialSeats(alliances, majoritySeats);
+  const changes: (Result & { allianceWinner: string })[] = [];
   for (const result of results) {
     const bestAlliance = Object.entries(alliances).reduce(
       (currentWinner, [name, parties]) => {

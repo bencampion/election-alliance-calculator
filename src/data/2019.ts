@@ -1,17 +1,4 @@
-export type Party =
-  | "apni"
-  | "brexit"
-  | "dup"
-  | "con"
-  | "green"
-  | "lab"
-  | "ld"
-  | "pc"
-  | "sdlp"
-  | "sf"
-  | "snp"
-  | "uup"
-  | "other";
+import { Party, Result } from "./types";
 
 export const majoritySeats: Record<Party, number> = {
   apni: 0,
@@ -28,12 +15,6 @@ export const majoritySeats: Record<Party, number> = {
   uup: 0,
   other: 1,
 };
-
-type Result = {
-  name: string;
-  region: string;
-  winner: string;
-} & Partial<Record<Party, number>>;
 
 export const results: Result[] = [
   {

@@ -4,8 +4,9 @@ import userEvent from "@testing-library/user-event";
 import App from "./App";
 
 describe("No alliances", () => {
-  beforeAll(() => {
+  beforeAll(async () => {
     render(<App />);
+    await screen.findAllByRole("rowheader");
   });
 
   test.each([
@@ -36,6 +37,7 @@ describe("No alliances", () => {
 describe("[Lib Dem + Green] Left Alliance and [DUP + UUP] Right Alliance", () => {
   beforeAll(async () => {
     render(<App />);
+    await screen.findAllByRole("rowheader");
     await userEvent.click(screen.getAllByLabelText("Green")[0]);
     await userEvent.click(screen.getAllByLabelText("Lib Dems")[0]);
     await userEvent.click(screen.getAllByLabelText("DUP")[1]);
