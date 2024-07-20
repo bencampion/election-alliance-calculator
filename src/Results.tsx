@@ -4,16 +4,18 @@ import { Party, Result } from "./data/types";
 
 const partyNames: Record<string, JSX.Element | string> = {
   apni: <abbr title="Alliance Party of Northern Ireland">APNI</abbr>,
-  brexit: <abbr title="Brexit Party">Brexit</abbr>,
+  brx: <abbr title="Brexit Party">Brexit</abbr>,
   con: <abbr title="Conservative Party">Conservative</abbr>,
   dup: <abbr title="Democratic Unionist Party">DUP</abbr>,
   green: <abbr title="Green Party">Green</abbr>,
   lab: <abbr title="Labour Party">Labour</abbr>,
   ld: <abbr title="Liberal Democrats">Lib Dems</abbr>,
   pc: "Plaid Cymru",
+  ruk: <abbr title="Reform UK">Reform</abbr>,
   sdlp: <abbr title="Social Democratic and Labour Party">SDLP</abbr>,
   sf: "Sinn Féin",
   snp: <abbr title="Scottish National Party">SNP</abbr>,
+  ukip: <abbr title="UK Independence Party">UKIP</abbr>,
   uup: <abbr title="Ulster Unionist Party">UUP</abbr>,
   other: "Other",
   left: "Left Alliance",
@@ -73,12 +75,14 @@ function Results({ year }: { year: "2019" }) {
       <section className="columns">
         <Alliance
           name="Left"
+          parties={Object.keys(data.majoritySeats)}
           members={left}
           setMembers={setLeft}
           opponents={right}
         />
         <Alliance
           name="Right"
+          parties={Object.keys(data.majoritySeats)}
           members={right}
           setMembers={setRight}
           opponents={left}
@@ -151,11 +155,13 @@ function SeatCount({
 
 function Alliance({
   name,
+  parties,
   members,
   setMembers,
   opponents,
 }: {
   name: string;
+  parties: string[];
   members: string[];
   setMembers: (newValues: string[]) => void;
   opponents: string[];
@@ -168,9 +174,6 @@ function Alliance({
         : [...members, party],
     );
   };
-  const parties = Object.keys(partyNames).filter(
-    (party) => party !== "left" && party !== "right",
-  );
   return (
     <div>
       <h2 className="title is-4 mb-1">{name} Alliance</h2>

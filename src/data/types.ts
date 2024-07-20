@@ -1,8 +1,8 @@
 export type Party =
   | "apni"
-  | "brexit"
-  | "dup"
+  | "brx"
   | "con"
+  | "dup"
   | "green"
   | "lab"
   | "ld"
@@ -10,6 +10,8 @@ export type Party =
   | "sdlp"
   | "sf"
   | "snp"
+  | "ruk"
+  | "ukip"
   | "uup"
   | "other";
 
