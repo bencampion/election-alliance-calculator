@@ -1,4 +1,4 @@
-import { Party, Result } from "./types";
+import { Party, Result } from "../types";
 
 export const majoritySeats: Partial<Record<Party, number>> = {
   apni: 0,

@@ -50,7 +50,7 @@ function Results({ year }: { year: "2019" }) {
     results: [] as Result[],
   });
   useEffect(() => {
-    import(`./data/${year}.ts`).then(setData);
+    import(`./data/generated/${year}.ts`).then(setData);
   }, [year]);
   const results = countVotes(alliances, data.majoritySeats, data.results);
 
