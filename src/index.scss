@@ -1,21 +1,3 @@
-$custom-colors: (
-  "apni": #d6b429,
-  "brx": #17b9d1,
-  "con": #0087dc,
-  "dup": #d46a4c,
-  "green": #5fb25f,
-  "lab": #e4003b,
-  "ld": #faa61a,
-  "pc": #1dcb89,
-  "ruk": #0ad1e0,
-  "sdlp": #258426,
-  "sf": #326760,
-  "snp": #ffda52,
-  "ukip": #773582,
-  "uup": #77c0f8,
-  "other": #bababa,
-);
-
 @import "bulma/sass/utilities/_all";
 @import "bulma/sass/base/_all";
 @import "bulma/sass/elements/container";
@@ -25,23 +7,7 @@ $custom-colors: (
 @import "bulma/sass/components/tabs";
 @import "bulma/sass/form/shared";
 @import "bulma/sass/form/tools";
+@import "bulma/sass/grid/columns";
 @import "bulma/sass/helpers/color";
 @import "bulma/sass/helpers/spacing";
 @import "bulma/sass/helpers/typography";
-
-.columns {
-  display: grid;
-  @include mobile {
-    grid-template-columns: 1fr;
-  }
-  @include tablet {
-    grid-template-columns: 1fr 1fr;
-  }
-  gap: $block-spacing;
-  margin-bottom: $block-spacing;
-}
-
-.columns > div {
-  padding: $block-spacing;
-  background-color: $white-ter;
-}

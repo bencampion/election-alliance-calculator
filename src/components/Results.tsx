@@ -22,6 +22,24 @@ const partyNames: Record<string, JSX.Element | string> = {
   right: "Right Alliance",
 };
 
+const partyColours: Record<string, string> = {
+  apni: "#d6b429",
+  brx: "#17b9d1",
+  con: "#0087dc",
+  dup: "#d46a4c",
+  green: "#5fb25f",
+  lab: "#e4003b",
+  ld: "#faa61a",
+  pc: "#1dcb89",
+  ruk: "#0ad1e0",
+  sdlp: "#258426",
+  sf: "#326760",
+  snp: "#ffda52",
+  ukip: "#773582",
+  uup: "#77c0f8",
+  other: "#bababa",
+};
+
 function Results() {
   const [searchParams, setSearchParams] = useSearchParams();
   const left = searchParams.getAll("left");
@@ -136,7 +154,11 @@ function SeatCount({
         role="rowheader"
       >
         {(alliances[party] ?? [party]).map((party) => (
-          <span key={party} className={`tag is-${party}`} />
+          <span
+            key={party}
+            className="tag"
+            style={{ backgroundColor: partyColours[party] }}
+          />
         ))}
         <span className="tag is-dark">{partyNames[party]}</span>
       </div>
@@ -169,25 +191,27 @@ function Alliance({
     );
   };
   return (
-    <div>
-      <h2 className="title is-4 mb-1">{name} Alliance</h2>
-      <fieldset>
-        <legend className="mb-3">
-          Select parties to combine their votes to form a{" "}
-          <strong>{name} Alliance</strong>.
-        </legend>
-        <div className="field is-grouped is-grouped-multiline">
-          {parties.map((party) => (
-            <PartyCheckBox
-              key={party}
-              party={party}
-              onChange={toggleMembership}
-              checked={members.includes(party)}
-              disabled={opponents.includes(party)}
-            />
-          ))}
-        </div>
-      </fieldset>
+    <div className="column">
+      <div className="p-5 has-background-white-ter">
+        <h2 className="title is-4 mb-1">{name} Alliance</h2>
+        <fieldset>
+          <legend className="mb-3">
+            Select parties to combine their votes to form a{" "}
+            <strong>{name} Alliance</strong>.
+          </legend>
+          <div className="field is-grouped is-grouped-multiline">
+            {parties.map((party) => (
+              <PartyCheckBox
+                key={party}
+                party={party}
+                onChange={toggleMembership}
+                checked={members.includes(party)}
+                disabled={opponents.includes(party)}
+              />
+            ))}
+          </div>
+        </fieldset>
+      </div>
     </div>
   );
 }
@@ -205,10 +229,9 @@ function PartyCheckBox({
 }) {
   return (
     <div className="control">
-      <label className={`tags has-addons ${disabled ? "" : "is-clickable"}`}>
-        <span className={`tag is-${party}`}>
+      <label className={"tags has-addons"}>
+        <span className="tag" style={{ backgroundColor: partyColours[party] }}>
           <input
-            className={disabled ? undefined : "is-clickable"}
             type="checkbox"
             disabled={disabled}
             value={party}
