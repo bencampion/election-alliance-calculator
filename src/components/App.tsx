@@ -18,7 +18,7 @@ const router = createHashRouter([
         path: "/:year",
         element: <Results />,
         loader: async ({ params }) => {
-          const data = await import(`./data/generated/${params.year}.ts`);
+          const data = await import(`../data/generated/${params.year}.ts`);
           return { year: params.year, ...data };
         },
       },

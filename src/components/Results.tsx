@@ -1,6 +1,6 @@
-import { countVotes } from "./countVotes";
-import { Party, Result } from "./data/types";
 import { useLoaderData, useSearchParams } from "react-router-dom";
+import { countVotes } from "../data/countVotes.ts";
+import { Party, Result } from "../data/types.ts";
 
 const partyNames: Record<string, JSX.Element | string> = {
   apni: <abbr title="Alliance Party of Northern Ireland">APNI</abbr>,

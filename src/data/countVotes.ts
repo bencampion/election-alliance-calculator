@@ -1,4 +1,4 @@
-import { Party, Result } from "./data/types";
+import { Party, Result } from "./types.ts";
 
 function initialSeats(
   alliances: Record<string, string[]>,
