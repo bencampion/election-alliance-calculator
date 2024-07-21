@@ -10,7 +10,6 @@ describe("Results", () => {
       ["Conservative", "121"],
       ["Lib Dems", "72"],
       ["SNP", "9"],
-      ["Other", "8"],
       ["Sinn Féin", "7"],
       ["DUP", "5"],
       ["Reform", "5"],
@@ -19,6 +18,7 @@ describe("Results", () => {
       ["SDLP", "2"],
       ["APNI", "1"],
       ["UUP", "1"],
+      ["Other", "8"],
     ],
     "2019": [
       ["Conservative", "365"],
@@ -41,8 +41,8 @@ describe("Results", () => {
       ["DUP", "10"],
       ["Sinn Féin", "7"],
       ["Plaid Cymru", "4"],
-      ["Other", "2"],
       ["Green", "1"],
+      ["Other", "2"],
     ],
     "2015": [
       ["Conservative", "330"],
@@ -54,9 +54,9 @@ describe("Results", () => {
       ["Plaid Cymru", "3"],
       ["SDLP", "3"],
       ["UUP", "2"],
-      ["Other", "2"],
       ["Green", "1"],
       ["UKIP", "1"],
+      ["Other", "2"],
     ],
   };
 

@@ -95,7 +95,15 @@ function Seats({
       >
         {Object.entries(results.seats)
           .filter((seat) => seat[1] > 0)
-          .sort((a, b) => b[1] - a[1])
+          .sort((a, b) => {
+            if (a[0] === "other") {
+              return 1;
+            } else if (b[0] === "other") {
+              return -1;
+            } else {
+              return b[1] - a[1];
+            }
+          })
           .map(([party, count]) => (
             <SeatCount
               key={party}
