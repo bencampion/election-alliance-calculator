@@ -32,6 +32,8 @@ jobs:
         uses: actions/configure-pages@v5
       - name: Install dependencies
         run: npm ci
+      - name: Test
+        run: npm run test -- run
       - name: Build site
         env:
           NODE_ENV: production
