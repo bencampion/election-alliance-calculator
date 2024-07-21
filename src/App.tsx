@@ -1,32 +1,31 @@
-import Results from "./Results";
+import { createHashRouter, RouterProvider } from "react-router-dom";
+import Layout from "./Layout.tsx";
+import Error from "./Error.tsx";
+import About from "./About.tsx";
+import Results from "./Results.tsx";
 
-function App() {
-  return (
-    <div className="container">
-      <header className="m-5">
-        <h1 className="title">2019 UK general election alliance calculator</h1>
-      </header>
+const router = createHashRouter([
+  {
+    path: "/",
+    element: <Layout />,
+    errorElement: <Layout outlet={<Error />} />,
+    children: [
+      {
+        path: "/",
+        element: <About />,
+      },
+      {
+        path: "/:year",
+        element: <Results />,
+        loader: async ({ params }) => {
+          const data = await import(`./data/generated/${params.year}.ts`);
+          return { year: params.year, ...data };
+        },
+      },
+    ],
+  },
+]);
 
-      <Results year="2019" />
-
-      <hr />
-
-      <footer className="is-size-7 m-5">
-        <p>
-          Data:{" "}
-          <a href="https://commonslibrary.parliament.uk/research-briefings/cbp-8749/">
-            General Election 2019: full results and analysis
-          </a>
-        </p>
-        <p>
-          Code:{" "}
-          <a href="https://github.com/bencampion/election-alliance-calculator">
-            https://github.com/bencampion/election-alliance-calculator
-          </a>
-        </p>
-      </footer>
-    </div>
-  );
+export default function App() {
+  return <RouterProvider router={router} />;
 }
-
-export default App;

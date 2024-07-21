@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
 import { countVotes } from "./countVotes";
 import { Party, Result } from "./data/types";
+import { useLoaderData, useSearchParams } from "react-router-dom";
 
 const partyNames: Record<string, JSX.Element | string> = {
   apni: <abbr title="Alliance Party of Northern Ireland">APNI</abbr>,
@@ -22,36 +22,18 @@ const partyNames: Record<string, JSX.Element | string> = {
   right: "Right Alliance",
 };
 
-function useSearchParam(
-  name: string,
-): [string[], (newValues: string[]) => void] {
-  const searchParams = new URLSearchParams(window.location.search);
-  const [values, setValues] = useState(searchParams.getAll(name));
-  return [
-    values,
-    (newValues) => {
-      setValues(newValues);
-      const url = new URL(window.location.toString());
-      url.searchParams.delete(name);
-      newValues.forEach((value) => url.searchParams.append(name, value));
-      url.searchParams.sort();
-      window.history.replaceState({}, "", url);
-    },
-  ];
-}
+function Results() {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const left = searchParams.getAll("left");
+  const right = searchParams.getAll("right");
 
-function Results({ year }: { year: "2019" }) {
-  const [left, setLeft] = useSearchParam("left");
-  const [right, setRight] = useSearchParam("right");
+  const { year, ...data } = useLoaderData() as {
+    majoritySeats: Record<Party, number>;
+    results: Result[];
+    year: string;
+  };
 
   const alliances = { left, right };
-  const [data, setData] = useState({
-    majoritySeats: {} as Record<Party, number>,
-    results: [] as Result[],
-  });
-  useEffect(() => {
-    import(`./data/generated/${year}.ts`).then(setData);
-  }, [year]);
   const results = countVotes(alliances, data.majoritySeats, data.results);
 
   const constituencies = Object.values(data.majoritySeats).reduce(
@@ -77,14 +59,18 @@ function Results({ year }: { year: "2019" }) {
           name="Left"
           parties={Object.keys(data.majoritySeats)}
           members={left}
-          setMembers={setLeft}
+          setMembers={(members) =>
+            setSearchParams({ left: members, right }, { replace: true })
+          }
           opponents={right}
         />
         <Alliance
           name="Right"
           parties={Object.keys(data.majoritySeats)}
           members={right}
-          setMembers={setRight}
+          setMembers={(members) =>
+            setSearchParams({ left, right: members }, { replace: true })
+          }
           opponents={left}
         />
       </section>
