@@ -72,7 +72,7 @@ function Results() {
 
       <Seats results={results} alliances={alliances} />
 
-      <section className="columns">
+      <section className="grid">
         <Alliance
           name="Left"
           parties={Object.keys(data.majoritySeats)}
@@ -191,27 +191,25 @@ function Alliance({
     );
   };
   return (
-    <div className="column">
-      <div className="p-5 has-background-white-ter">
-        <h2 className="title is-4 mb-1">{name} Alliance</h2>
-        <fieldset>
-          <legend className="mb-3">
-            Select parties to combine their votes to form a{" "}
-            <strong>{name} Alliance</strong>.
-          </legend>
-          <div className="field is-grouped is-grouped-multiline">
-            {parties.map((party) => (
-              <PartyCheckBox
-                key={party}
-                party={party}
-                onChange={toggleMembership}
-                checked={members.includes(party)}
-                disabled={opponents.includes(party)}
-              />
-            ))}
-          </div>
-        </fieldset>
-      </div>
+    <div className="p-5 has-background-white-ter">
+      <h2 className="title is-4 mb-1">{name} Alliance</h2>
+      <fieldset>
+        <legend className="mb-3">
+          Select parties to combine their votes to form a{" "}
+          <strong>{name} Alliance</strong>.
+        </legend>
+        <div className="field is-grouped is-grouped-multiline">
+          {parties.map((party) => (
+            <PartyCheckBox
+              key={party}
+              party={party}
+              onChange={toggleMembership}
+              checked={members.includes(party)}
+              disabled={opponents.includes(party)}
+            />
+          ))}
+        </div>
+      </fieldset>
     </div>
   );
 }

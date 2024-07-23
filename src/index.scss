@@ -7,7 +7,18 @@
 @import "bulma/sass/components/tabs";
 @import "bulma/sass/form/shared";
 @import "bulma/sass/form/tools";
-@import "bulma/sass/grid/columns";
 @import "bulma/sass/helpers/color";
 @import "bulma/sass/helpers/spacing";
 @import "bulma/sass/helpers/typography";
+
+.grid {
+  display: grid;
+  @include mobile {
+    grid-template-columns: 1fr;
+  }
+  @include tablet {
+    grid-template-columns: 1fr 1fr;
+  }
+  gap: $block-spacing;
+  margin-bottom: $block-spacing;
+}
