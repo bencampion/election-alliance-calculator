@@ -3,41 +3,41 @@ import { countVotes } from "../data/countVotes.ts";
 import { Party, Result } from "../data/types.ts";
 
 const partyNames: Record<string, JSX.Element | string> = {
-  apni: <abbr title="Alliance Party of Northern Ireland">APNI</abbr>,
-  brx: <abbr title="Brexit Party">Brexit</abbr>,
-  con: <abbr title="Conservative Party">Conservative</abbr>,
-  dup: <abbr title="Democratic Unionist Party">DUP</abbr>,
-  green: <abbr title="Green Party">Green</abbr>,
-  lab: <abbr title="Labour Party">Labour</abbr>,
-  ld: <abbr title="Liberal Democrats">Lib Dems</abbr>,
-  pc: "Plaid Cymru",
-  ruk: <abbr title="Reform UK">Reform</abbr>,
-  sdlp: <abbr title="Social Democratic and Labour Party">SDLP</abbr>,
-  sf: "Sinn Féin",
-  snp: <abbr title="Scottish National Party">SNP</abbr>,
-  ukip: <abbr title="UK Independence Party">UKIP</abbr>,
-  uup: <abbr title="Ulster Unionist Party">UUP</abbr>,
-  other: "Other",
+  APNI: <abbr title="Alliance Party of Northern Ireland">APNI</abbr>,
+  BRX: <abbr title="Brexit Party">Brexit</abbr>,
+  Con: <abbr title="Conservative Party">Conservative</abbr>,
+  DUP: <abbr title="Democratic Unionist Party">DUP</abbr>,
+  Green: <abbr title="Green Party">Green</abbr>,
+  Lab: <abbr title="Labour Party">Labour</abbr>,
+  LD: <abbr title="Liberal Democrats">Lib Dems</abbr>,
+  PC: "Plaid Cymru",
+  RUK: <abbr title="Reform UK">Reform</abbr>,
+  SDLP: <abbr title="Social Democratic and Labour Party">SDLP</abbr>,
+  SF: "Sinn Féin",
+  SNP: <abbr title="Scottish National Party">SNP</abbr>,
+  UKIP: <abbr title="UK Independence Party">UKIP</abbr>,
+  UUP: <abbr title="Ulster Unionist Party">UUP</abbr>,
+  Other: "Other",
   left: "Left Alliance",
   right: "Right Alliance",
 };
 
 const partyColours: Record<string, string> = {
-  apni: "#d6b429",
-  brx: "#17b9d1",
-  con: "#0087dc",
-  dup: "#d46a4c",
-  green: "#5fb25f",
-  lab: "#e4003b",
-  ld: "#faa61a",
-  pc: "#1dcb89",
-  ruk: "#0ad1e0",
-  sdlp: "#258426",
-  sf: "#326760",
-  snp: "#ffda52",
-  ukip: "#773582",
-  uup: "#77c0f8",
-  other: "#bababa",
+  APNI: "#d6b429",
+  BRX: "#17b9d1",
+  Con: "#0087dc",
+  DUP: "#d46a4c",
+  Green: "#5fb25f",
+  Lab: "#e4003b",
+  LD: "#faa61a",
+  PC: "#1dcb89",
+  RUK: "#0ad1e0",
+  SDLP: "#258426",
+  SF: "#326760",
+  SNP: "#ffda52",
+  UKIP: "#773582",
+  UUP: "#77c0f8",
+  Other: "#bababa",
 };
 
 function Results() {
@@ -114,9 +114,9 @@ function Seats({
         {Object.entries(results.seats)
           .filter((seat) => seat[1] > 0)
           .sort((a, b) => {
-            if (a[0] === "other") {
+            if (a[0] === "Other") {
               return 1;
-            } else if (b[0] === "other") {
+            } else if (b[0] === "Other") {
               return -1;
             } else {
               return b[1] - a[1];

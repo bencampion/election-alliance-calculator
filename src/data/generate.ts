@@ -33,10 +33,10 @@ for (const file of readdirSync(new URL("csv", import.meta.url))) {
     (function* () {
       for (const party of PARTIES) {
         if (party in csv[0]) {
-          yield [party.toLowerCase(), 0];
+          yield [party, 0];
         }
       }
-      yield ["other", 0];
+      yield ["Other", 0];
     })(),
   );
 
@@ -45,7 +45,7 @@ for (const file of readdirSync(new URL("csv", import.meta.url))) {
     if (!PARTIES.includes(winnerRow)) {
       winnerRow = OTHER;
     }
-    const winner = winnerRow === OTHER ? "other" : winnerRow.toLowerCase();
+    const winner = winnerRow === OTHER ? "Other" : winnerRow;
 
     if (row[winnerRow] < row["Valid votes"] / 2) {
       const result: Record<string, unknown> = {
@@ -55,11 +55,11 @@ for (const file of readdirSync(new URL("csv", import.meta.url))) {
       };
       for (const party of PARTIES) {
         if (row[party]) {
-          result[party.toLowerCase()] = row[party];
+          result[party] = row[party];
         }
       }
       if (row[OTHER]) {
-        result["other"] = row[OTHER];
+        result["Other"] = row[OTHER];
       }
       results.push(result);
     } else {

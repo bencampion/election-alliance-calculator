@@ -1,22 +1,22 @@
 export type Party =
-  | "apni"
-  | "brx"
-  | "con"
-  | "dup"
-  | "green"
-  | "lab"
-  | "ld"
-  | "pc"
-  | "sdlp"
-  | "sf"
-  | "snp"
-  | "ruk"
-  | "ukip"
-  | "uup"
-  | "other";
+  | "APNI"
+  | "BRX"
+  | "Con"
+  | "DUP"
+  | "Green"
+  | "Lab"
+  | "LD"
+  | "PC"
+  | "SDLP"
+  | "SF"
+  | "SNP"
+  | "RUK"
+  | "UKIP"
+  | "UUP"
+  | "Other";
 
 export type Result = {
   name: string;
   region: string;
-  winner: string;
+  winner: Party;
 } & Partial<Record<Party, number>>;
