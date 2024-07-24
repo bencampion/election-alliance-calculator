@@ -8,6 +8,7 @@ const partyNames: Record<string, JSX.Element | string> = {
   Con: <abbr title="Conservative Party">Conservative</abbr>,
   DUP: <abbr title="Democratic Unionist Party">DUP</abbr>,
   Green: <abbr title="Green Party">Green</abbr>,
+  Ind: "Independent",
   Lab: <abbr title="Labour Party">Labour</abbr>,
   LD: <abbr title="Liberal Democrats">Lib Dems</abbr>,
   PC: "Plaid Cymru",
@@ -15,6 +16,8 @@ const partyNames: Record<string, JSX.Element | string> = {
   SDLP: <abbr title="Social Democratic and Labour Party">SDLP</abbr>,
   SF: "Sinn Féin",
   SNP: <abbr title="Scottish National Party">SNP</abbr>,
+  Spk: <abbr title="Speaker of the House of Commons">Speaker</abbr>,
+  TUV: <abbr title="Traditional Unionist Voice">TUV</abbr>,
   UKIP: <abbr title="UK Independence Party">UKIP</abbr>,
   UUP: <abbr title="Ulster Unionist Party">UUP</abbr>,
   Other: "Other",
@@ -28,6 +31,7 @@ const partyColours: Record<string, string> = {
   Con: "#0087dc",
   DUP: "#d46a4c",
   Green: "#5fb25f",
+  Ind: "#fc86c2",
   Lab: "#e4003b",
   LD: "#faa61a",
   PC: "#1dcb89",
@@ -35,6 +39,8 @@ const partyColours: Record<string, string> = {
   SDLP: "#258426",
   SF: "#326760",
   SNP: "#ffda52",
+  Spk: "#6a6a6a",
+  TUV: "#0c4a8a",
   UKIP: "#773582",
   UUP: "#77c0f8",
   Other: "#bababa",
@@ -113,15 +119,7 @@ function Seats({
       >
         {Object.entries(results.seats)
           .filter((seat) => seat[1] > 0)
-          .sort((a, b) => {
-            if (a[0] === "Other") {
-              return 1;
-            } else if (b[0] === "Other") {
-              return -1;
-            } else {
-              return b[1] - a[1];
-            }
-          })
+          .sort((a, b) => b[1] - a[1])
           .map(([party, count]) => (
             <SeatCount
               key={party}

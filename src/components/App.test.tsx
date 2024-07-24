@@ -11,14 +11,16 @@ describe("Results", () => {
       ["Lib Dems", "72"],
       ["SNP", "9"],
       ["Sinn Féin", "7"],
+      ["Independent", "6"],
       ["DUP", "5"],
       ["Reform", "5"],
       ["Green", "4"],
       ["Plaid Cymru", "4"],
       ["SDLP", "2"],
       ["APNI", "1"],
+      ["Speaker", "1"],
+      ["TUV", "1"],
       ["UUP", "1"],
-      ["Other", "8"],
     ],
     "2019": [
       ["Conservative", "365"],
@@ -31,7 +33,7 @@ describe("Results", () => {
       ["SDLP", "2"],
       ["APNI", "1"],
       ["Green", "1"],
-      ["Other", "1"],
+      ["Speaker", "1"],
     ],
     "2017": [
       ["Conservative", "317"],
@@ -42,7 +44,8 @@ describe("Results", () => {
       ["Sinn Féin", "7"],
       ["Plaid Cymru", "4"],
       ["Green", "1"],
-      ["Other", "2"],
+      ["Independent", "1"],
+      ["Speaker", "1"],
     ],
     "2015": [
       ["Conservative", "330"],
@@ -55,8 +58,9 @@ describe("Results", () => {
       ["SDLP", "3"],
       ["UUP", "2"],
       ["Green", "1"],
+      ["Independent", "1"],
+      ["Speaker", "1"],
       ["UKIP", "1"],
-      ["Other", "2"],
     ],
   };
 
@@ -116,7 +120,7 @@ describe("Alliances", () => {
         [5, "Sinn Féin", "7"],
         [6, "Plaid Cymru", "4"],
         [7, "SDLP", "2"],
-        [8, "Other", "1"],
+        [8, "Speaker", "1"],
       ])("Result %i: %s have %i seats", async (position, party, seats) => {
         expect(screen.getAllByRole("rowheader")[position]).toHaveTextContent(
           party,
