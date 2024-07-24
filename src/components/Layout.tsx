@@ -4,7 +4,7 @@ export default function Layout({ outlet }: { outlet?: JSX.Element }) {
   const location = useLocation();
 
   return (
-    <div className="container is-fullhd">
+    <div style={{ maxWidth: "1392px", margin: "auto" }}>
       <header className="m-5">
         <h1 className="title">UK general election alliance calculator</h1>
         <nav>
