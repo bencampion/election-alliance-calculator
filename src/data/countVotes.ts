@@ -38,7 +38,7 @@ function countVotes(
       votes: number;
       parties: string[];
     };
-    if (bestAlliance.votes >= (result[result.winner as Party] ?? 0)) {
+    if (bestAlliance.votes >= (result[result.winner] ?? 0)) {
       seats[bestAlliance.name]++;
       if (!bestAlliance.parties.includes(result.winner)) {
         changes.push({ ...result, allianceWinner: bestAlliance.name });

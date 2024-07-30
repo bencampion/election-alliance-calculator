@@ -49,7 +49,7 @@ for (const file of readdirSync(new URL("csv", import.meta.url))) {
     constituencyResults.set(name, constituency);
   }
 
-  const year = file.match(/HoC-GE(\d+)/)![1]!;
+  const year = file.match(/HoC-GE(\d+)/)![1];
   const parties = PARTIES[year];
   const majoritySeats = Object.fromEntries(parties.map((party) => [party, 0]));
   const results: Record<string, unknown>[] = [];

@@ -121,7 +121,7 @@ describe("Alliances", () => {
         [6, "Plaid Cymru", "4"],
         [7, "SDLP", "2"],
         [8, "Speaker", "1"],
-      ])("Result %i: %s have %i seats", async (position, party, seats) => {
+      ])("Result %i: %s have %i seats", (position, party, seats) => {
         expect(screen.getAllByRole("rowheader")[position]).toHaveTextContent(
           party,
         );
