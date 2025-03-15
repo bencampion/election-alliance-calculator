@@ -1,8 +1,8 @@
 import { useLoaderData, useSearchParams } from "react-router-dom";
 import { countVotes } from "../data/countVotes.ts";
-import { Party, Result } from "../data/types.ts";
+import { Alliance, Party, ResultChange, Election } from "../data/types.ts";
 
-const partyNames: Record<string, React.JSX.Element | string> = {
+const partyNames: Record<Alliance | Party, React.JSX.Element | string> = {
   APNI: <abbr title="Alliance Party of Northern Ireland">APNI</abbr>,
   BRX: <abbr title="Brexit Party">Brexit</abbr>,
   Con: <abbr title="Conservative Party">Conservative</abbr>,
@@ -21,11 +21,11 @@ const partyNames: Record<string, React.JSX.Element | string> = {
   UKIP: <abbr title="UK Independence Party">UKIP</abbr>,
   UUP: <abbr title="Ulster Unionist Party">UUP</abbr>,
   Other: "Other",
-  left: "Left Alliance",
-  right: "Right Alliance",
+  Left: "Left Alliance",
+  Right: "Right Alliance",
 };
 
-const partyColours: Record<string, string> = {
+const partyColours: Record<Party, string> = {
   APNI: "#d6b429",
   BRX: "#17b9d1",
   Con: "#0087dc",
@@ -48,49 +48,45 @@ const partyColours: Record<string, string> = {
 
 function Results() {
   const [searchParams, setSearchParams] = useSearchParams();
-  const left = searchParams.getAll("left");
-  const right = searchParams.getAll("right");
+  const left = searchParams.getAll("left") as Party[];
+  const right = searchParams.getAll("right") as Party[];
 
-  const { year, ...data } = useLoaderData() as {
-    majoritySeats: Partial<Record<Party, number>>;
-    results: Result[];
-    year: string;
-  };
+  const data = useLoaderData() as Election;
 
-  const alliances = { left, right };
+  const alliances = { Left: left, Right: right };
   const results = countVotes(alliances, data.majoritySeats, data.results);
 
-  const constituencies = Object.values(data.majoritySeats).reduce(
+  const constituencies = Array.from(data.majoritySeats.values()).reduce(
     (prev, curr) => prev - curr,
     650,
   );
-  const wikiLink = `https://en.wikipedia.org/wiki/${year}_United_Kingdom_general_election`;
+  const wikiLink = `https://en.wikipedia.org/wiki/${data.year}_United_Kingdom_general_election`;
 
   return (
     <main>
       <p className="subtitle mx-5">
         There were <strong>{constituencies}</strong> constituencies in the{" "}
-        <a href={wikiLink}>{year} United Kingdom general election</a> where the
-        winner got less than 50 percent of the votes. What would have happened
-        if parties had formed alliances to combine their votes behind a single
-        candidate in each of those constituencies?
+        <a href={wikiLink}>{data.year} United Kingdom general election</a> where
+        the winner got less than 50 percent of the votes. What would have
+        happened if parties had formed alliances to combine their votes behind a
+        single candidate in each of those constituencies?
       </p>
 
-      <Seats results={results} alliances={alliances} />
+      <Seats seats={results.seats} alliances={alliances} />
 
       <section className="grid">
-        <Alliance
+        <AllianceMembers
           name="Left"
-          parties={Object.keys(data.majoritySeats)}
+          parties={Array.from(data.majoritySeats.keys())}
           members={left}
           setMembers={(members) => {
             setSearchParams({ left: members, right }, { replace: true });
           }}
           opponents={right}
         />
-        <Alliance
+        <AllianceMembers
           name="Right"
-          parties={Object.keys(data.majoritySeats)}
+          parties={Array.from(data.majoritySeats.keys())}
           members={right}
           setMembers={(members) => {
             setSearchParams({ left, right: members }, { replace: true });
@@ -99,17 +95,17 @@ function Results() {
         />
       </section>
 
-      <SeatChanges results={results} />
+      <SeatChanges changes={results.changes} />
     </main>
   );
 }
 
 function Seats({
-  results,
+  seats,
   alliances,
 }: {
-  results: ReturnType<typeof countVotes>;
-  alliances: Record<string, string[]>;
+  seats: Map<Alliance | Party, number>;
+  alliances: { Left: Party[]; Right: Party[] };
 }) {
   return (
     <section className="m-5 mx-5">
@@ -117,7 +113,7 @@ function Seats({
         className="field is-grouped is-grouped-centered is-grouped-multiline"
         role="table"
       >
-        {Object.entries(results.seats)
+        {Array.from(seats.entries())
           .filter((seat) => seat[1] > 0)
           .sort((a, b) => b[1] - a[1])
           .map(([party, count]) => (
@@ -141,9 +137,9 @@ function SeatCount({
   count,
   alliances,
 }: {
-  party: string;
+  party: Alliance | Party;
   count: number;
-  alliances: Record<string, string[]>;
+  alliances: { Left: Party[]; Right: Party[] };
 }) {
   return (
     <div className="control" role="row">
@@ -151,7 +147,10 @@ function SeatCount({
         className="tags has-addons mb-0 is-justify-content-center"
         role="rowheader"
       >
-        {(alliances[party] ?? [party]).map((party) => (
+        {(party === "Left" || party === "Right"
+          ? alliances[party]
+          : [party]
+        ).map((party) => (
           <span
             key={party}
             className="tag"
@@ -167,21 +166,21 @@ function SeatCount({
   );
 }
 
-function Alliance({
+function AllianceMembers({
   name,
   parties,
   members,
   setMembers,
   opponents,
 }: {
-  name: string;
-  parties: string[];
-  members: string[];
+  name: Alliance;
+  parties: Party[];
+  members: Party[];
   setMembers: (newValues: string[]) => void;
-  opponents: string[];
+  opponents: Party[];
 }) {
   const toggleMembership = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const party = e.target.value;
+    const party = e.target.value as Party;
     setMembers(
       members.includes(party)
         ? members.filter((m) => m !== party)
@@ -218,7 +217,7 @@ function PartyCheckBox({
   checked,
   disabled,
 }: {
-  party: string;
+  party: Party;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   checked: boolean;
   disabled: boolean;
@@ -249,18 +248,18 @@ function PartyCheckBox({
   );
 }
 
-function SeatChanges({ results }: { results: ReturnType<typeof countVotes> }) {
+function SeatChanges({ changes }: { changes: ResultChange[] }) {
   return (
     <section className="mx-5 content">
       <details>
         <summary className="title is-5">
-          Seats changed ({results.changes.length})
+          Seats changed ({changes.length})
         </summary>
-        {results.changes.length === 0 ? (
+        {changes.length === 0 ? (
           <p>No seat changes.</p>
         ) : (
           <ul>
-            {results.changes.map((result) => (
+            {changes.map((result) => (
               <li key={result.name}>
                 {result.name} — {result.region} (
                 <strong>{partyNames[result.allianceWinner]}</strong> gain from{" "}

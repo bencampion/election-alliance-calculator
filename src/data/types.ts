@@ -18,8 +18,18 @@ export type Party =
   | "UUP"
   | "Other";
 
+export type Alliance = "Left" | "Right";
+
 export type Result = {
   name: string;
   region: string;
   winner: Party;
 } & Partial<Record<Party, number>>;
+
+export type ResultChange = Result & { allianceWinner: Alliance };
+
+export interface Election {
+  year: string;
+  majoritySeats: Map<Party, number>;
+  results: Result[];
+}

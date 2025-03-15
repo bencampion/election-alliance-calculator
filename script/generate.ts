@@ -1,16 +1,17 @@
 import { readFileSync, writeFileSync, readdirSync } from "node:fs";
 import { parse } from "csv-parse/sync";
+import { Party, Result } from "../src/data/types";
 
 interface Row {
   "Constituency name": string;
   "Region name": string;
-  "Party abbreviation": string;
+  "Party abbreviation": Party;
   "Candidate first name": string;
   "Candidate surname": string;
   Votes: number;
 }
 
-const MAIN_PARTIES = [
+const MAIN_PARTIES: Party[] = [
   "APNI",
   "Con",
   "DUP",
@@ -26,7 +27,7 @@ const MAIN_PARTIES = [
   "UUP",
   "Other",
 ];
-const PARTIES: Record<string, string[]> = {
+const PARTIES: Record<string, Party[]> = {
   "2015": [...MAIN_PARTIES, "UKIP"],
   "2017": [...MAIN_PARTIES, "UKIP"],
   "2019": [...MAIN_PARTIES, "BRX"],
@@ -51,8 +52,10 @@ for (const file of readdirSync(new URL("csv", import.meta.url))) {
 
   const year = /HoC-GE(\d+)/.exec(file)![1];
   const parties = PARTIES[year];
-  const majoritySeats = Object.fromEntries(parties.map((party) => [party, 0]));
-  const results: Record<string, unknown>[] = [];
+  const majoritySeats = new Map<Party, number>(
+    parties.map((party) => [party, 0]),
+  );
+  const results: Result[] = [];
 
   constituencyResults.forEach((constituencyResult) => {
     const winner = constituencyResult.reduce((prev, curr) =>
@@ -64,30 +67,33 @@ for (const file of readdirSync(new URL("csv", import.meta.url))) {
     );
 
     if (winner.Votes < totalVotes / 2) {
-      const votes: Record<string, number | undefined> = {};
+      const votes = new Map<Party, number>();
       for (const row of constituencyResult) {
         const party = row["Party abbreviation"];
         if (parties.includes(party)) {
-          votes[party] = (votes[party] ?? 0) + row.Votes;
+          votes.set(party, (votes.get(party) ?? 0) + row.Votes);
         } else {
-          votes.Other = (votes.Other ?? 0) + row.Votes;
+          votes.set("Other", (votes.get("Other") ?? 0) + row.Votes);
         }
       }
       results.push({
         name: winner["Constituency name"],
         region: winner["Region name"],
         winner: winner["Party abbreviation"],
-        ...sortByParty(votes),
+        ...Object.fromEntries(sortByParty(votes)),
       });
     } else {
-      majoritySeats[winner["Party abbreviation"]]++;
+      const count = majoritySeats.get(winner["Party abbreviation"]) ?? 0;
+      majoritySeats.set(winner["Party abbreviation"], count + 1);
     }
 
     const data = `import { Party, Result } from "../types";
 
-    export const majoritySeats: Partial<Record<Party, number>> = ${JSON.stringify(
+    export const year = "${year}";
+
+    export const majoritySeats = new Map<Party, number>(${JSON.stringify(
       sortByParty(majoritySeats),
-    )}
+    )});
   
     export const results: Result[] = ${JSON.stringify(results)}`;
     writeFileSync(
@@ -97,15 +103,13 @@ for (const file of readdirSync(new URL("csv", import.meta.url))) {
   });
 }
 
-function sortByParty<T>(obj: Record<string, T>) {
-  return Object.fromEntries(
-    Object.entries(obj).sort((a, b) => {
-      if (a[0] === "Other") {
-        return 1;
-      } else if (b[0] === "Other") {
-        return -1;
-      }
-      return a[0].localeCompare(b[0]);
-    }),
-  );
+function sortByParty<T>(entries: Iterable<[Party, T]>) {
+  return Array.from(entries).sort((a, b) => {
+    if (a[0] === "Other") {
+      return 1;
+    } else if (b[0] === "Other") {
+      return -1;
+    }
+    return a[0].localeCompare(b[0]);
+  });
 }

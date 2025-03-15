@@ -2,7 +2,6 @@ import { isRouteErrorResponse, useRouteError } from "react-router-dom";
 
 export default function ErrorPage() {
   const error = useRouteError();
-  console.error(error);
 
   return (
     <main className="content m-5">
@@ -16,7 +15,7 @@ export default function ErrorPage() {
         </>
       ) : (
         <p>
-          {isRouteErrorResponse(error) ? error.statusText : "Unknown errror"}
+          {isRouteErrorResponse(error) ? error.statusText : "Unknown error"}
         </p>
       )}
     </main>

@@ -1,50 +1,39 @@
-import { Party, Result } from "./types.ts";
+import { Alliance, Party, Result, ResultChange } from "./types.ts";
 
 function initialSeats(
-  alliances: Record<string, string[]>,
-  majoritySeats: Partial<Record<Party, number>>,
+  alliances: Record<Alliance, Party[]>,
+  majoritySeats: Map<Party, number>,
 ) {
-  const seats: Record<string, number> = Object.assign({}, majoritySeats);
-  Object.entries(alliances).forEach(([name, parties]) => {
-    parties.forEach((party) => {
-      seats[name] = (seats[name] ?? 0) + seats[party];
-      delete seats[party];
-    });
-  });
+  const seats = new Map<Alliance | Party, number>(majoritySeats);
+  for (const alliance of ["Left", "Right"] as Alliance[]) {
+    for (const party of alliances[alliance]) {
+      seats.set(alliance, (seats.get(alliance) ?? 0) + seats.get(party)!);
+      seats.delete(party);
+    }
+  }
   return seats;
 }
 
 function countVotes(
-  alliances: Record<string, string[]>,
-  majoritySeats: Partial<Record<Party, number>>,
+  alliances: Record<Alliance, Party[]>,
+  majoritySeats: Map<Party, number>,
   results: Result[],
 ) {
   const seats = initialSeats(alliances, majoritySeats);
-  const changes: (Result & { allianceWinner: string })[] = [];
+  const changes: ResultChange[] = [];
   for (const result of results) {
-    const bestAlliance = Object.entries(alliances).reduce(
-      (currentWinner, [name, parties]) => {
-        const votes = parties.reduce(
-          (votes, party) => (result[party as Party] ?? 0) + votes,
-          0,
-        );
-        return votes > currentWinner.votes
-          ? { name, votes, parties }
-          : currentWinner;
-      },
-      { votes: 0 },
-    ) as {
-      name: string;
-      votes: number;
-      parties: string[];
-    };
-    if (bestAlliance.votes >= (result[result.winner] ?? 0)) {
-      seats[bestAlliance.name]++;
-      if (!bestAlliance.parties.includes(result.winner)) {
-        changes.push({ ...result, allianceWinner: bestAlliance.name });
+    const count = (votes: number, party: Party) => (result[party] ?? 0) + votes;
+    const leftVotes = alliances.Left.reduce(count, 0);
+    const rightVotes = alliances.Right.reduce(count, 0);
+    const bestAllianceVotes = leftVotes > rightVotes ? leftVotes : rightVotes;
+    if (bestAllianceVotes >= result[result.winner]!) {
+      const allianceWinner = leftVotes > rightVotes ? "Left" : "Right";
+      seats.set(allianceWinner, seats.get(allianceWinner)! + 1);
+      if (!alliances[allianceWinner].includes(result.winner)) {
+        changes.push({ ...result, allianceWinner: allianceWinner });
       }
     } else {
-      seats[result.winner] = (seats[result.winner] ?? 0) + 1;
+      seats.set(result.winner, (seats.get(result.winner) ?? 0) + 1);
     }
   }
   return { seats, changes };

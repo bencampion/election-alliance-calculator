@@ -1,22 +1,24 @@
 import { Party, Result } from "../types";
 
-export const majoritySeats: Partial<Record<Party, number>> = {
-  APNI: 0,
-  Con: 243,
-  DUP: 5,
-  Green: 1,
-  Ind: 0,
-  Lab: 222,
-  LD: 1,
-  PC: 0,
-  SDLP: 0,
-  SF: 3,
-  SNP: 0,
-  Spk: 1,
-  UKIP: 0,
-  UUP: 0,
-  Other: 0,
-};
+export const year = "2017";
+
+export const majoritySeats = new Map<Party, number>([
+  ["APNI", 0],
+  ["Con", 243],
+  ["DUP", 5],
+  ["Green", 1],
+  ["Ind", 0],
+  ["Lab", 222],
+  ["LD", 1],
+  ["PC", 0],
+  ["SDLP", 0],
+  ["SF", 3],
+  ["SNP", 0],
+  ["Spk", 1],
+  ["UKIP", 0],
+  ["UUP", 0],
+  ["Other", 0],
+]);
 
 export const results: Result[] = [
   {
