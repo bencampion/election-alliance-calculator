@@ -49,7 +49,7 @@ for (const file of readdirSync(new URL("csv", import.meta.url))) {
     constituencyResults.set(name, constituency);
   }
 
-  const year = file.match(/HoC-GE(\d+)/)![1];
+  const year = /HoC-GE(\d+)/.exec(file)![1];
   const parties = PARTIES[year];
   const majoritySeats = Object.fromEntries(parties.map((party) => [party, 0]));
   const results: Record<string, unknown>[] = [];
@@ -64,13 +64,13 @@ for (const file of readdirSync(new URL("csv", import.meta.url))) {
     );
 
     if (winner.Votes < totalVotes / 2) {
-      const votes: Record<string, number> = {};
+      const votes: Record<string, number | undefined> = {};
       for (const row of constituencyResult) {
         const party = row["Party abbreviation"];
         if (parties.includes(party)) {
           votes[party] = (votes[party] ?? 0) + row.Votes;
         } else {
-          votes["Other"] = (votes["Other"] ?? 0) + row.Votes;
+          votes.Other = (votes.Other ?? 0) + row.Votes;
         }
       }
       results.push({

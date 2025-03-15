@@ -1,7 +1,8 @@
 import { createHashRouter, RouterProvider } from "react-router-dom";
-import Layout from "./Layout.tsx";
-import Error from "./Error.tsx";
+import { Party, Result } from "../data/types.ts";
 import About from "./About.tsx";
+import Error from "./Error.tsx";
+import Layout from "./Layout.tsx";
 import Results from "./Results.tsx";
 
 const router = createHashRouter([
@@ -18,7 +19,12 @@ const router = createHashRouter([
         path: "/:year",
         element: <Results />,
         loader: async ({ params }) => {
-          const data = await import(`../data/generated/${params.year}.ts`);
+          const data = (await import(
+            `../data/generated/${params.year!}.ts`
+          )) as {
+            majoritySeats: Partial<Record<Party, number>>;
+            results: Result[];
+          };
           return { year: params.year, ...data };
         },
       },

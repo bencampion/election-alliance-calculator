@@ -2,7 +2,7 @@ import { Party, Result } from "./types.ts";
 
 function initialSeats(
   alliances: Record<string, string[]>,
-  majoritySeats: Record<Party, number>,
+  majoritySeats: Partial<Record<Party, number>>,
 ) {
   const seats: Record<string, number> = Object.assign({}, majoritySeats);
   Object.entries(alliances).forEach(([name, parties]) => {
@@ -16,7 +16,7 @@ function initialSeats(
 
 function countVotes(
   alliances: Record<string, string[]>,
-  majoritySeats: Record<Party, number>,
+  majoritySeats: Partial<Record<Party, number>>,
   results: Result[],
 ) {
   const seats = initialSeats(alliances, majoritySeats);

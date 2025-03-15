@@ -1,6 +1,6 @@
-import { afterAll, beforeAll, describe, expect, test } from "vitest";
 import { cleanup, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { afterAll, beforeAll, describe, expect, test } from "vitest";
 import App from "./App.tsx";
 
 describe("Results", () => {

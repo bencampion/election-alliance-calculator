@@ -2,7 +2,7 @@ import { useLoaderData, useSearchParams } from "react-router-dom";
 import { countVotes } from "../data/countVotes.ts";
 import { Party, Result } from "../data/types.ts";
 
-const partyNames: Record<string, JSX.Element | string> = {
+const partyNames: Record<string, React.JSX.Element | string> = {
   APNI: <abbr title="Alliance Party of Northern Ireland">APNI</abbr>,
   BRX: <abbr title="Brexit Party">Brexit</abbr>,
   Con: <abbr title="Conservative Party">Conservative</abbr>,
@@ -52,7 +52,7 @@ function Results() {
   const right = searchParams.getAll("right");
 
   const { year, ...data } = useLoaderData() as {
-    majoritySeats: Record<Party, number>;
+    majoritySeats: Partial<Record<Party, number>>;
     results: Result[];
     year: string;
   };
@@ -83,18 +83,18 @@ function Results() {
           name="Left"
           parties={Object.keys(data.majoritySeats)}
           members={left}
-          setMembers={(members) =>
-            setSearchParams({ left: members, right }, { replace: true })
-          }
+          setMembers={(members) => {
+            setSearchParams({ left: members, right }, { replace: true });
+          }}
           opponents={right}
         />
         <Alliance
           name="Right"
           parties={Object.keys(data.majoritySeats)}
           members={right}
-          setMembers={(members) =>
-            setSearchParams({ left, right: members }, { replace: true })
-          }
+          setMembers={(members) => {
+            setSearchParams({ left, right: members }, { replace: true });
+          }}
           opponents={left}
         />
       </section>

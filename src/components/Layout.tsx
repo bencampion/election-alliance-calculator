@@ -1,6 +1,6 @@
 import { Link, Outlet, useLocation } from "react-router-dom";
 
-export default function Layout({ outlet }: { outlet?: JSX.Element }) {
+export default function Layout({ outlet }: { outlet?: React.JSX.Element }) {
   const location = useLocation();
 
   return (
@@ -28,7 +28,7 @@ export default function Layout({ outlet }: { outlet?: JSX.Element }) {
         </nav>
       </header>
 
-      {outlet ? outlet : <Outlet />}
+      {outlet ?? <Outlet />}
 
       <hr className="mx-5" />
 
