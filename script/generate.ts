@@ -90,7 +90,10 @@ for (const file of readdirSync(new URL("csv", import.meta.url))) {
     )}
   
     export const results: Result[] = ${JSON.stringify(results)}`;
-    writeFileSync(new URL(`generated/${year}.ts`, import.meta.url), data);
+    writeFileSync(
+      new URL(`../src/data/generated/${year}.ts`, import.meta.url),
+      data,
+    );
   });
 }
 
